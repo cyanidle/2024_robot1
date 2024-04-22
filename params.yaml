@@ -1,0 +1,130 @@
+bigbang_rplidar:
+  scan_mode: DenseBoost
+  scan_frequency: 9 # min 8 - max 15 (s1) / 10 for a1
+  reversed: true
+  lidar_offset: 3.1415
+  serial:
+    baudrate: 256000 # 115200 a1 / 256000 s1
+  beacons:
+    all_poses_x: [0.06,  1,    1.96]
+    all_poses_y: [-0.06, 2.96, -0.04]
+  enable_beacons: true
+  shape:
+    dist_margin: 0.07
+  simple:
+    dist_margin: 0.22
+  objects:
+    max_dist_between_dots: 0.03
+    start_ttl: 700
+
+monte_carlo:
+  resample_on_measure: true
+  send_particles: true
+  particles:
+    count: 2300
+    start_rotation: 0 # in degrees
+    resample_move: 0.045
+    resample_turn: 0.15
+  density:
+    ok_level: 0.85
+    mid_level: 0.7
+
+costmap_server:
+  keep_rviz_points_ms: 15000
+  inflate:
+    robot_safe_radius: 0.45
+  inflate_static:
+    robot_safe_radius: 0.18
+
+pid: &pid
+  p: 450
+  i: 600
+  d: 1
+
+arduino_interface:
+  debug: true
+  start_position: 
+    x: 0
+    y: 0
+    z: 0
+  odom_coeffs:
+    theta_coeff: 1.075
+    x_coeff: 1
+    y_coeff: 1
+    base_radius: 0.15
+    max_delta_secs: 1
+  servos: # 0 - 4095 
+    # 0 arm top
+    # 1 arm mid
+    # 2 balls
+    nums:           [0   , 1   , 2   ]
+    channels:       [13  , 14  , 15  ]
+    speeds:         [80  , 80  , 80  ] 
+    minVals:        [703 , 793 , 1632 ]
+    maxVals:        [1250, 1525, 1800]
+    startPercents:  [0 ,   100 , 0   ] #max 4095 
+  frame_id: "costmap"
+  child_frame_id: "odom"
+  motor0:
+    num: 0
+    angle: 90
+    max_speed: 0.55
+    max_turn_speed: 0.25
+    radius: 0.18 # circumference
+    ticks_per_rotation: 360
+    coeff: 1
+    pid: *pid
+    pinout: 
+      encoder_a: 18
+      encoder_b: 31
+      enable: 12
+      forward: 34
+      back: 35
+  motor1:
+    num: 1
+    angle: 210
+    max_speed: 0.55
+    max_turn_speed: 0.25
+    radius: 0.18 # circumference
+    ticks_per_rotation: 360
+    coeff: 1
+    pid: *pid
+    pinout: 
+      encoder_a: 19
+      encoder_b: 38
+      enable: 8
+      forward: 37
+      back: 36
+  motor2:
+    num: 2
+    angle: 330
+    max_speed: 0.55
+    max_turn_speed: 0.25
+    radius: 0.18 # circumference
+    ticks_per_rotation: 360
+    coeff: 1
+    pid: *pid
+    pinout: 
+      encoder_a: 3
+      encoder_b: 49
+      enable: 9
+      forward: 43
+      back: 42
+
+local_planer:
+  drive:
+    min_speed_coeff: 0.45
+    min_rotation_spd: 0.4
+    full_rot_spd_per_radians: 1.2
+    enable_mid_path_rotation: false
+    max_radians_per_meter: 1
+    max_speed_for_meters: 0.5
+  margins:
+    position: 0.022 #m
+    theta: 0.032 #radians
+
+global_planer:
+  consider_reached_after: 1
+  a_star_params:
+    max_cost: 45
+    costmap_to_node_cost_coeff: 5

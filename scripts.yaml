@@ -1,0 +1,64 @@
+#"call_service": CallService,
+#"post_msg": PostMsg,
+#"post_msg": PostMsgs,
+#"sleep": Wait,
+#"move": Move, 
+#"nested": RobotScript,
+#"script": RobotScript
+#"existing": CallExisting
+
+scripts:
+  wait_second: 
+    type: script
+    data:
+      steps:
+        - type: sleep
+          data: 
+            amount: 1
+  pump_on:
+    type: post_msg
+    data:
+      topic: arduino/pump
+      msg: {data: true}
+  pump_off:
+    type: post_msg
+    data:
+      topic: arduino/pump
+      msg: {data: false}
+  open_left_ball:
+    type: post_msgs
+    data:
+      topic: servo_command
+      min_time: 0.1
+      msgs: [{num: 0, percents: 100},]
+  close_left_ball:
+    type: post_msgs
+    data:
+      topic: servo_command
+      min_time: 0.1
+      msgs: [{num: 0, percents: 0},]
+  open_right_ball:
+    type: post_msgs
+    data:
+      topic: servo_command
+      min_time: 0.1
+      msgs: [{num: 1, percents: 0},]
+  close_right_ball:
+    type: post_msgs
+    data:
+      topic: servo_command
+      min_time: 0.1
+      msgs: [{num: 1, percents: 100},]
+  open_hatch:
+    type: post_msgs
+    data:
+      topic: servo_command
+      min_time: 0.1
+      msgs: [{num: 2, percents: 100},]
+  close_hatch:
+    type: post_msgs
+    data:
+      topic: servo_command
+      min_time: 0.1
+      msgs: [{num: 2, percents: 0},]
+  
